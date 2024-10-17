@@ -188,3 +188,8 @@ return [
     ])->toArray(),
 
 ];
+
+'providers' => [
+    // 他のプロバイダーのリストの中に追加
+    Barryvdh\Debugbar\ServiceProvider::class,
+],
