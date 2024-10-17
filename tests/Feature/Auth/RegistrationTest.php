@@ -13,7 +13,6 @@ class RegistrationTest extends TestCase
     public function test_registration_screen_can_be_rendered(): void
     {
         $response = $this->get('/register');
-
         $response->assertStatus(200);
     }
 
@@ -21,9 +20,13 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
+            'kana' => 'テスト ユーザー',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'postal_code' => '0000000',
+            'address' => 'テスト',
+            'phone_number' => '00000000000',
         ]);
 
         $this->assertAuthenticated();
