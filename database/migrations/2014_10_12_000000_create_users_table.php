@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('kana');
+            $table->string('postal_code');
+            $table->string('address');
+            $table->string('phone_number');
+            $table->date('birthday')->nullable();
+            $table->string('occupation')->nullable();
         });
     }
 
