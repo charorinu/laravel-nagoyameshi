@@ -13,7 +13,7 @@ return [
     'timezone' => 'Asia/Tokyo',
     'locale' => 'ja',
     'fallback_locale' => 'en',
-    'faker_locale' => 'ja_JP', // 'ja_JP'の後ろにカンマを追加
+    'faker_locale' => 'ja_JP',  
 
     'key' => env('APP_KEY'),
     'cipher' => 'AES-256-CBC',
@@ -25,8 +25,8 @@ return [
 
     'providers' => ServiceProvider::defaultProviders()->merge([
         // パッケージサービスプロバイダ
-        Barryvdh\Debugbar\ServiceProvider::class,
-
+        // Barryvdh\Debugbar\ServiceProvider::class,
+        
         // アプリケーションサービスプロバイダ
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
