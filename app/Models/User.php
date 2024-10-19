@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Contracts\Auth\MustVerifyEmail; 
+use Illuminate\Contracts\Auth\MustVerifyEmail; // 追加
 
-class User extends Authenticatable implements MustVerifyEmail // ここを修正
+class User extends Authenticatable implements MustVerifyEmail // 変更
 {
     use HasApiTokens, HasFactory, Notifiable;
 
