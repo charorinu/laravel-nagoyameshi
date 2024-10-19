@@ -5,7 +5,6 @@
     <div class="row justify-content-center">
         <div class="col-xl-5 col-lg-6 col-md-8">
             <h1 class="mb-4 text-center">新規会員登録</h1>
-
             <hr class="mb-4">
 
             @if ($errors->any())
@@ -19,7 +18,8 @@
             @endif
 
             <form method="POST" action="{{ route('register') }}">
-                @csrf
+                @csrf  <!-- ここにCSRFトークンを追加 -->
+
                 <div class="form-group row mb-3">
                     <label for="name" class="col-md-5 col-form-label text-md-left fw-bold">
                         <div class="d-flex align-items-center">
@@ -27,7 +27,6 @@
                             <span class="badge bg-danger">必須</span>
                         </div>
                     </label>
-
                     <div class="col-md-7">
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="侍 太郎">
                     </div>
@@ -142,7 +141,6 @@
                 </div>
 
                 <hr class="my-4">
-
                 <div class="form-group d-flex justify-content-center mb-4">
                     <button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>
                 </div>
