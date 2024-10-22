@@ -13,11 +13,10 @@ use Tests\TestCase;
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
- 
+
     public function test_login_screen_can_be_rendered(): void
     {
         $response = $this->get('/admin/login');
-
         $response->assertStatus(200);
     }
 
@@ -31,7 +30,11 @@ class AuthenticationTest extends TestCase
         $response = $this->post('/admin/login', [
             'email' => $admin->email,
             'password' => 'nagoyameshi',
+            '_token' => csrf_token(), // ここでCSRFトークンを追加
         ]);
+
+        dump(Auth::guard('admin')->check());
+        dump(Auth::guard('admin')->user());
 
         $this->assertTrue(Auth::guard('admin')->check());
         $response->assertRedirect(RouteServiceProvider::ADMIN_HOME);
@@ -47,6 +50,7 @@ class AuthenticationTest extends TestCase
         $this->post('/admin/login', [
             'email' => $admin->email,
             'password' => 'wrong-password',
+            '_token' => csrf_token(), // ここでCSRFトークンを追加
         ]);
 
         $this->assertGuest();
@@ -60,6 +64,8 @@ class AuthenticationTest extends TestCase
         $admin->save();
 
         $response = $this->actingAs($admin, 'admin')->post('/admin/logout');
+
+        dump(Auth::guard('admin')->check());
 
         $this->assertGuest();
         $response->assertRedirect('/');
