@@ -32,8 +32,10 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// 管理者用ルートグループ
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
+    Route::resource('users', UserController::class);
 });
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
