@@ -34,11 +34,13 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // 管理者用ルートグループ
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
-    Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
-    Route::resource('users', UserController::class);
-});
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/admin/logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
+        Route::resource('users', UserController::class);
+    });
+});

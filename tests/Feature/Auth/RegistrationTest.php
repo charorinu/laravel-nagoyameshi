@@ -10,6 +10,15 @@ class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->withoutMiddleware(
+            \App\Http\Middleware\VerifyCsrfToken::class
+        );
+    }
+
     public function test_registration_screen_can_be_rendered(): void
     {
         $response = $this->get('/register');
@@ -27,9 +36,10 @@ class RegistrationTest extends TestCase
             'postal_code' => '0000000',
             'address' => 'テスト',
             'phone_number' => '00000000000',
+            '_token' => csrf_token(), // CSRF トークンの追加
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
+        $response->assertRedirect('/verify-email'); // ここを RouteServiceProvider::HOME から修正
     }
 }

@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+/** 
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User> 
  */
 class UserFactory extends Factory
 {
-    /**
+    /** 
      * The current password being used by the factory.
      */
     protected static ?string $password;
 
-    /**
+    /** 
      * Define the model's default state.
-     *
-     * @return array<string, mixed>
+     * 
+     * @return array<string, mixed> 
      */
     public function definition(): array
     {
@@ -33,10 +33,11 @@ class UserFactory extends Factory
             'postal_code' => fake()->postcode(),
             'address' => fake()->address(),
             'phone_number' => fake()->phoneNumber(),
+            'is_admin' => false, // デフォルト値として false を設定
         ];
     }
 
-    /**
+    /** 
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

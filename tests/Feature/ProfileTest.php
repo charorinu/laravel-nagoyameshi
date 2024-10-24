@@ -4,19 +4,28 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
+    // CSRFトークン検証を無効化するためのsetUpメソッドを追加
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->withoutMiddleware(
+            \App\Http\Middleware\VerifyCsrfToken::class
+        );
+    }
+
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->get('/profile');
+        $response = $this->actingAs($user)->get('/profile');
 
         $response->assertOk();
     }
@@ -25,12 +34,11 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
+        $response = $this->actingAs($user)->patch('/profile', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            '_token' => csrf_token(), // CSRF トークンの追加
+        ]);
 
         $response
             ->assertSessionHasNoErrors()
@@ -47,12 +55,11 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $user->email,
-            ]);
+        $response = $this->actingAs($user)->patch('/profile', [
+            'name' => 'Test User',
+            'email' => $user->email,
+            '_token' => csrf_token(), // CSRF トークンの追加
+        ]);
 
         $response
             ->assertSessionHasNoErrors()
@@ -65,15 +72,13 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
+        $response = $this->actingAs($user)->delete('/profile', [
+            'password' => 'password',
+            '_token' => csrf_token(), // CSRF トークンの追加
+        ]);
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/');
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect('/');
 
         $this->assertGuest();
         $this->assertNull($user->fresh());
@@ -83,12 +88,10 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
+        $response = $this->actingAs($user)->from('/profile')->delete('/profile', [
+            'password' => 'wrong-password',
+            '_token' => csrf_token(), // CSRF トークンの追加
+        ]);
 
         $response
             ->assertSessionHasErrorsIn('userDeletion', 'password')
