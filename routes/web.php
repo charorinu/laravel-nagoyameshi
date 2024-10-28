@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // 管理者用ルートグループ
+Route::redirect('/admin', '/admin/login');
+
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
@@ -44,3 +47,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::resource('users', UserController::class);
     });
 });
+
